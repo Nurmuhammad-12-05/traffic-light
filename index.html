@@ -4,27 +4,71 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Svetofor</title>
-    <link rel="stylesheet" href="./styles.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <div class="container">
-      <div class="light-section">
-        <div class="light-circle" id="red-light"></div>
+  <body
+    class="bg-gray-900 min-h-screen flex flex-col items-center justify-center text-white"
+  >
+    <div
+      class="bg-gray-800 rounded-3xl p-6 w-44 h-[540px] flex flex-col justify-between shadow-2xl"
+    >
+      <div class="flex justify-center items-center flex-1">
+        <div
+          id="red"
+          class="w-24 h-24 rounded-full bg-gray-700 shadow-inner transition-all duration-300"
+        ></div>
       </div>
-      <div class="light-section">
-        <div class="light-circle" id="yellow-light"></div>
+
+      <div class="flex justify-center items-center flex-1">
+        <div
+          id="yellow"
+          class="w-24 h-24 rounded-full bg-gray-700 shadow-inner transition-all duration-300"
+        ></div>
       </div>
-      <div class="light-section">
-        <div class="light-circle" id="green-light"></div>
+
+      <div class="flex justify-center items-center flex-1">
+        <div
+          id="green"
+          class="w-24 h-24 rounded-full bg-gray-700 shadow-inner transition-all duration-300"
+        ></div>
       </div>
     </div>
 
-    <div class="controls">
-      <button class="control-btn" onclick="setLight('red')">Red</button>
-      <button class="control-btn" onclick="setLight('yellow')">Yellow</button>
-      <button class="control-btn" onclick="setLight('green')">Green</button>
-      <button class="control-btn" onclick="startAuto()">Auto</button>
-      <button class="control-btn" onclick="stopAuto()">Stop</button>
+    <div class="mt-10 flex flex-wrap gap-3 justify-center">
+      <button
+        onclick="setLight('red')"
+        class="px-5 py-2 bg-red-600 hover:bg-red-700 rounded-lg shadow-lg"
+      >
+        Red
+      </button>
+
+      <button
+        onclick="setLight('yellow')"
+        class="px-5 py-2 bg-yellow-400 text-black hover:bg-yellow-500 rounded-lg shadow-lg"
+      >
+        Yellow
+      </button>
+
+      <button
+        onclick="setLight('green')"
+        class="px-5 py-2 bg-green-600 hover:bg-green-700 rounded-lg shadow-lg"
+      >
+        Green
+      </button>
+
+      <button
+        onclick="startAuto()"
+        class="px-5 py-2 bg-blue-500 hover:bg-blue-600 rounded-lg shadow-lg"
+      >
+        Auto
+      </button>
+
+      <button
+        onclick="stopAuto()"
+        class="px-5 py-2 bg-gray-500 hover:bg-gray-600 rounded-lg shadow-lg"
+      >
+        Stop
+      </button>
     </div>
 
     <script src="./app.js"></script>

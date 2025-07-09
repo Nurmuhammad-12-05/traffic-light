@@ -1,53 +1,180 @@
-let autoInterval;
-
-let currentLight = 0;
-
-const lights = ["red", "yellow", "green"];
-
-function setLight(color) {
-  document.getElementById("red-light").className = "light-circle";
-
-  document.getElementById("yellow-light").className = "light-circle";
-
-  document.getElementById("green-light").className = "light-circle";
-
-  document.getElementById(color + "-light").className =
-    "light-circle " + color + "-active";
-}
-
-function startAuto() {
-  stopAuto();
-
-  autoInterval = setInterval(() => {
-    setLight(lights[currentLight]);
-
-    currentLight = (currentLight + 1) % lights.length;
-  }, 2000);
-}
-
-function stopAuto() {
-  if (autoInterval) {
-    clearInterval(autoInterval);
-
-    autoInterval = null;
+class Svetafor {
+  constructor() {
+    this.colors = ["red", "yellow", "green"];
+    this.intervalId = null;
+    this.timeoutId = null;
+    this.timerSpan = null;
+    this.autoRunning = false;
+    this.currentStage = "red";
+    this.init();
   }
 
-  document.getElementById("red-light").className = "light-circle";
+  init() {
+    this.colors.forEach((color) => {
+      const el = document.getElementById(color);
 
-  document.getElementById("yellow-light").className = "light-circle";
+      el.innerHTML = "";
 
-  document.getElementById("green-light").className = "light-circle";
+      el.addEventListener("click", () => this.setLight(color, 0, false));
+    });
+  }
+
+  setLight(color, countdown = 0, autoNext = true) {
+    this.clearTimers();
+
+    this.colors.forEach((c) => {
+      const el = document.getElementById(c);
+
+      el.style.backgroundColor = "#374151";
+
+      el.classList.remove(
+        "ring-4",
+        `ring-${c}-500`,
+        "scale-105",
+        "animate-pulse"
+      );
+      el.innerHTML = "";
+    });
+
+    const active = document.getElementById(color);
+    active.style.backgroundColor = color;
+
+    active.classList.add(
+      "ring-4",
+      `ring-${color}-500`,
+      "scale-105",
+      "relative"
+    );
+
+    if (countdown > 0 && color !== "yellow") {
+      const span = document.createElement("span");
+
+      span.className = "absolute text-white text-4xl font-bold";
+
+      span.style.top = "50%";
+
+      span.style.left = "50%";
+
+      span.style.transform = "translate(-50%, -50%)";
+
+      span.innerText = countdown;
+
+      active.appendChild(span);
+
+      this.timerSpan = span;
+    }
+
+    this.countdownTimer(countdown, color, autoNext);
+  }
+
+  countdownTimer(seconds, color, autoNext) {
+    this.intervalId = setInterval(() => {
+      seconds--;
+
+      if (this.timerSpan) {
+        this.timerSpan.innerText = seconds;
+      }
+
+      if (
+        (color === "yellow" && seconds <= 2) ||
+        (color === "green" && seconds <= 3)
+      ) {
+        const el = document.getElementById(color);
+
+        el.classList.add("animate-pulse");
+      }
+
+      if (seconds <= 0) {
+        clearInterval(this.intervalId);
+
+        this.intervalId = null;
+
+        if (autoNext) this.nextStage();
+      }
+    }, 1000);
+  }
+
+  nextStage() {
+    switch (this.currentStage) {
+      case "red":
+        this.currentStage = "yellowAfterRed";
+
+        this.setLight("yellow", 5);
+
+        break;
+
+      case "yellowAfterRed":
+        this.currentStage = "green";
+
+        this.setLight("green", 15);
+
+        break;
+
+      case "green":
+        this.currentStage = "yellowAfterGreen";
+
+        this.setLight("yellow", 5);
+
+        break;
+
+      case "yellowAfterGreen":
+        this.currentStage = "red";
+
+        this.setLight("red", 20);
+        break;
+    }
+  }
+
+  startAuto() {
+    if (this.autoRunning) return;
+
+    this.autoRunning = true;
+
+    this.stopAuto();
+
+    this.currentStage = "red";
+
+    this.setLight("red", 20);
+  }
+
+  stopAuto() {
+    this.clearTimers();
+
+    this.autoRunning = false;
+
+    this.currentStage = "red";
+
+    this.colors.forEach((c) => {
+      const el = document.getElementById(c);
+
+      el.style.backgroundColor = "#374151";
+
+      el.classList.remove(
+        "ring-4",
+        `ring-${c}-500`,
+        "scale-105",
+        "animate-pulse"
+      );
+
+      el.innerHTML = "";
+    });
+  }
+
+  clearTimers() {
+    if (this.intervalId) clearInterval(this.intervalId);
+
+    if (this.timeoutId) clearTimeout(this.timeoutId);
+
+    this.intervalId = null;
+
+    this.timeoutId = null;
+  }
 }
 
-document
-  .getElementById("red-light")
+const svetafor = new Svetafor();
 
-  .addEventListener("click", () => setLight("red"));
-document
-  .getElementById("yellow-light")
+document.querySelector("button[onclick*='startAuto']").onclick = () =>
+  svetafor.startAuto();
 
-  .addEventListener("click", () => setLight("yellow"));
-document
-  .getElementById("green-light")
-
-  .addEventListener("click", () => setLight("green"));
+document.querySelector("button[onclick*='stopAuto']").onclick = () =>
+  svetafor.stopAuto();
