@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Svetofor</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="light-section">
+        <div class="light-circle" id="red-light"></div>
+      </div>
+      <div class="light-section">
+        <div class="light-circle" id="yellow-light"></div>
+      </div>
+      <div class="light-section">
+        <div class="light-circle" id="green-light"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="control-btn" onclick="setLight('red')">Red</button>
+      <button class="control-btn" onclick="setLight('yellow')">Yellow</button>
+      <button class="control-btn" onclick="setLight('green')">Green</button>
+      <button class="control-btn" onclick="startAuto()">Auto</button>
+      <button class="control-btn" onclick="stopAuto()">Stop</button>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
